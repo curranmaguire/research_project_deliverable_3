@@ -9,10 +9,12 @@
 #SBATCH --time=24:00:00
 #SBATCH --output=job_%j.out
 #SBATCH --error=job_%j.err
-
+#sbatch --mail-type=ALL
 #SBATCH --mail-user=cgmj52@durham.ac.uk
 
 conda activate lewis
-export CUDA_LAUNCH_BLOCKING=1
 
-python DCG_model.py
+
+python DCG_classifier_train.py
+python DCG_bart_train.py
+python inference.py
