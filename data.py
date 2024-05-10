@@ -6,7 +6,7 @@ from utils import generate_attention_score
 from torch.utils.data import Dataset
 
 class BartDataset(Dataset):
-    def __init__(self, sentences,classifier_tokenizer, classifier, tokenizer, max_length=128, num_sentences=4, lambda_threshold = 0.5):
+    def __init__(self, sentences,classifier_tokenizer, classifier, tokenizer, max_length=514, num_sentences=4, lambda_threshold = 0.5):
         self.tokenizer = tokenizer
         self.classifier_tokenizer = classifier_tokenizer
         self.max_length = max_length
@@ -106,7 +106,7 @@ class BartDataset(Dataset):
                 file.write(f"{target_text}\n")
 
 class ClassifierDataset(Dataset):
-    def __init__(self, sentences, tokenizer, max_length=256, num_sentences=4):
+    def __init__(self, sentences, tokenizer, max_length=514, num_sentences=4):
         self.tokenizer = tokenizer
         self.max_length = max_length
         self.data = []

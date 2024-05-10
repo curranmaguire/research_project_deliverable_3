@@ -29,8 +29,8 @@ test_dataset = ClassifierDataset(test_list, tokenizer)
 data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
 # Create dataloader
-train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=2, shuffle=True, collate_fn=data_collator)
-test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=2, shuffle=True, collate_fn=data_collator)
+train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=32, shuffle=True, collate_fn=data_collator)
+test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=32, shuffle=True, collate_fn=data_collator)
 
 
 
@@ -117,4 +117,4 @@ for epoch in range(num_epochs):
         best_accuracy = val_accuracy
         best_model = model
 
-best_model.save_pretrained(f'results/classifier/')
+best_model.save_pretrained(f'results/classifier')

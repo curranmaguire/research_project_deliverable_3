@@ -8,7 +8,7 @@ from transformers import AdamW, get_linear_schedule_with_warmup
 from tqdm import tqdm
 ###================================CONFIG
 num_epochs = 50
-max_length = 128 #this is because the GPUs I have access to would OOM if I assigned greater. It is recommended to make this the maximum of 514
+max_length = 514 #this is because the GPUs I have access to would OOM if I assigned greater. It is recommended to make this the maximum of 514
 warmup_steps = 0
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -33,11 +33,11 @@ classifier_model.eval()
 
 
 
-
+print(f'starting dataset creation...')
 # Preprocess data
 # Load RoBERTa tokenizer
 tokenizer = BartTokenizer.from_pretrained('facebook/bart-base')
-
+print('completed dataset creation now training.')
 # Create dataset
 train_dataset = BartDataset(train_list, classifier_tokenizer, classifier_model, tokenizer)
 test_dataset = BartDataset(test_list, classifier_tokenizer, classifier_model,  tokenizer)
@@ -46,8 +46,8 @@ test_dataset = BartDataset(test_list, classifier_tokenizer, classifier_model,  t
 data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
 # Create dataloader
-train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=2, shuffle=True, collate_fn=data_collator)
-test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=2, shuffle=True, collate_fn=data_collator)
+train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=32, shuffle=True, collate_fn=data_collator)
+test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=32, shuffle=True, collate_fn=data_collator)
 
 
 
@@ -73,6 +73,7 @@ best_loss = 100
 for epoch in range(num_epochs):
     model.train()
     total_loss = 0
+    print(f'starting epoch {epoch}...')
     
     for batch in tqdm(train_dataloader, desc=f'Epoch {epoch+1}'):
         input_ids = batch['input_ids'].to(device)
